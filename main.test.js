@@ -1,5 +1,6 @@
 const { Ship } = require('./src/ship');
 const { Gameboard } = require('./src/board');
+const { Player } = require('./src/player');
 
 describe('Ship', () => {
   let ship;
@@ -177,4 +178,59 @@ describe('Gameboard', () => {
     expect(board.shipsAreSunk())
       .toBe(true);
   });
+});
+
+
+describe('Player', () => {
+  let name;
+  let board;
+  let player;
+
+  beforeEach(() => {
+    name = 'Player';
+    board = new Gameboard(10);
+    player = new Player(
+      name,
+      board
+    )
+  });
+
+  it('player created', () => {
+    expect(player).toEqual({
+      name: name,
+      board: board,
+      turns: []
+    });
+  });
+
+  it('make turn', () => {
+    const x = 0;
+    const y = 0;
+    expect(player.turn(x,y))
+      .toEqual([x,y]);
+  });
+
+  // we check that we couldn't make more decision than empty squares on board
+  it('make decision', () => {
+    let testAray = Array(120).fill('');
+    testAray.forEach(el => {
+      player.turn(...player.makeDecision());
+    });
+    expect(player.turns.length)
+      .toBeLessThanOrEqual(100);
+  })
+
+  it('place ships', () => {
+
+  });
+
+});
+
+describe('Game loop', () => {
+  // ask to place ships
+  // check all ships ready
+  // place ships of second player
+  // make game comp vs comp with some results
+  // check end game
+  // 
 });
