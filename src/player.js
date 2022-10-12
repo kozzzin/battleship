@@ -24,8 +24,8 @@ class Player {
 
     while(!decision) {
       if (decisions.length <= 0) decision = false;
-      const random = Math.floor(Math.random() * decisions.length);
-      const decisionCandidate = decisions.splice(random,1).flat();
+      const randomChoice = Math.floor(Math.random() * decisions.length);
+      const decisionCandidate = decisions.splice(randomChoice,1).flat();
       decision = this.checkSquare(decisionCandidate) === true ? decisionCandidate : false;
     }
 
@@ -39,29 +39,21 @@ class Player {
     });
   }
 
-  placeShips() {
-    // place first
-    // place second
-    // place third
-    // place forth
-    // fifth
+  placeShips(shipArray) {
+    shipArray.forEach(ship => this.placeShip(ship));
+  }
 
-    // check all rules
+  placeShip(ship) {
+    let placed = false;
+    const axises = ['x','y'];
 
-    // maybe move this to game loop
-    // because we place ship on board
-    // but using logic inside player object
-
-    // because we have steps for computer and player
-    // and they are the same
+    while(!placed) {
+      const axis = axises[Math.floor(Math.random() * 2)];
+      const x = Math.floor(Math.random() * 10);
+      const y = Math.floor(Math.random() * 10);
+      placed = this.board.addShip(x, y, axis, ship);
+    }
   }
 }
 
 module.exports = { Player }
-
-
-
-// assigning of the board belongs to game loop
-// also checking the end of game
-// also voving names of ships
-// 

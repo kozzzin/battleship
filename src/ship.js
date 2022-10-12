@@ -2,9 +2,7 @@ class Ship {
   constructor(size) {
     this.size = size;
     this.hits = 0;
-    // this.name = this.getName();
-    // we have two ships of a same size
-    // where to name them?
+    this.name = this.getName(size);
   }
 
   hit() {
@@ -15,16 +13,16 @@ class Ship {
     return (this.size - this.hits) <= 0;
   }
 
+  getName(size) {
+    const threeNames = ['Destroyer','Submarine'];
+    switch(size) {
+      case 5: return 'Carrier';
+      case 4: return 'Battleship';
+      case 3: return threeNames.shift();
+      case 2: return 'Patrol Boat';
+    }
+  }
+
 }
-
-// ship names !!!
-
-
-
-
-
-
-
-
 
 module.exports = { Ship }

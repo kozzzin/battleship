@@ -111,6 +111,20 @@ class Gameboard {
   shipsAreSunk() {
     return this.ships.every(el => el.isSunk());
   }
+
+  getPrintReadyBoard() {
+    const printBoard = this.board.map((line) => {
+      const printLine = line.map(square => {
+        if (square.value === undefined) {
+          return '-';
+        } else {
+          return 'S';
+        }
+      }).join(' ');
+      return printLine;
+    });
+    return printBoard.join('\n');
+  }
 }
 
 class Square {
@@ -122,6 +136,8 @@ class Square {
   update(value) {
     this.value = value;
   }
+
+
 
 }
 

@@ -15,6 +15,7 @@ describe('Ship', () => {
       .toEqual({
         size: size,
         hits: 0,
+        name: 'Carrier'
       });
   });
 
@@ -133,7 +134,8 @@ describe('Gameboard', () => {
       .toEqual({
         value: {
           size: 2,
-          hits: 1
+          hits: 1,
+          name: 'Patrol Boat'
         },
         hit: 1
       });
@@ -220,7 +222,19 @@ describe('Player', () => {
       .toBeLessThanOrEqual(100);
   })
 
-  it('place ships', () => {
+  it('AI: place ships', () => {
+    const testArray = [
+      new Ship(5),
+      new Ship(4),
+      new Ship(3),
+      new Ship(3),
+      new Ship(2),
+    ];
+
+    testArray.forEach(el => player.placeShip(el));
+
+    expect(player.board.ships)
+      .toEqual(testArray);
 
   });
 
@@ -232,5 +246,9 @@ describe('Game loop', () => {
   // place ships of second player
   // make game comp vs comp with some results
   // check end game
-  // 
+  //
+  it('place ships of both players', () => {
+
+  });
+
 });
