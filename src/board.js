@@ -111,6 +111,7 @@ class Gameboard {
       square.value.hit();
       return true;
     }
+    if (square.hit == 1) return true;
     return false;
   }
 

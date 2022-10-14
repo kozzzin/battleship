@@ -110,8 +110,28 @@ h2 {
   margin-top: 10px;
 }
 
-
 .hit::after {
+  content: '‧';
+  color: white;
+  display: block;
+  margin: auto;
+  font-size: 3rem;
+  line-height: 35px;
+  text-align: center;
+  width: 35px;
+  height: 35px;
+  box-sizing: border-box;
+}
+
+
+.ship.hit::after {
   content: 'X';
   color: red;
+  display: block;
+  margin: auto;
+  font-size: 2rem;
+  text-align: center;
+  width: 35px;
+  height: 35px;
+  box-sizing: border-box;
 }

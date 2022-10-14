@@ -45,7 +45,7 @@ class Game {
         ship = this.addNextShip(this.players[this.current]);
       } catch {
         document.querySelector('.player-container .board-grid').removeEventListener('mousedown', handler);
-        document.querySelector('.player-container .board-grid').style = "pointer-events: none; cursor: none;"
+        document.querySelector('.player-container .board-grid').style = "pointer-events: none; cursor: not-allowed;"
         return;
       }
 
@@ -66,8 +66,15 @@ class Game {
   }
 
   start() {
+
+    // new game with form
+    // write something in status bar
+    // put chosen name above the board
+    // win modal
+    // replay button
+
     const player = this.nextTurn();
-    // window.events.register('squareClick',this.player.board.addShip.bind(player.board));
+
     this.registerGridClick();
     window.events.register('squareClick',this.updateGrid.bind(this));
 
@@ -98,13 +105,6 @@ class Game {
 
   run() {
     console.log(this.enemy.board.getPrintReadyBoard());
-
-    // implement loop with interval for players
-    // maybe use await ?
-    // while not all sunk, give turn
-    // wait for turn
-    // check condition
-    // repeat once more
   }
 
   addNextShip(player, x, y, axis) {

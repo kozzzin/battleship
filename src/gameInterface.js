@@ -49,9 +49,19 @@ class GameInterface {
 
   receiveAttack(x,y, player, enemy) {
     console.log(x,y,player,enemy);
-    enemy.board.receiveAttack(x, y);
-    this.createCompGrid(enemy);
-    this.compGridListener(player, enemy);
+    const attack = enemy.board.receiveAttack(x, y);
+    if (attack) {
+      this.createCompGrid(enemy);
+      this.compGridListener(player, enemy);
+      if (enemy.board.shipsAreSunk()) {
+        alert('YOU WON');
+        return;
+      }
+      const compTurn = enemy.turn(...enemy.makeDecision());
+      player.board.receiveAttack(...compTurn);
+      this.createGrid(player,'.player-container .board-grid');
+      if (player.board.shipsAreSunk()) alert('COMP WON');
+    }
   }
 
   createGrid(player, target) {
@@ -97,8 +107,26 @@ class GameInterface {
     document.querySelector('.button-container').remove();
   }
 
-  followCursor(ship) {
+  iterateSquares(x, y, axis) {
+    let i;
+    let limit;
+    if (axis === 'y') {
+      i = x;
+      limit = (x + ship.size);
+    }
+    
+    for (i; i < limit; i++) {
+      const nextSquare = 
+        document.querySelector(`[data-x="${i}"][data-y="${y}"]`);
+      if (nextSquare) {
+        squares.push(nextSquare);
+      } else {
+        break
+      }
+    }
+  }
 
+  followCursor(ship) {
     // when intersects with borders make red
     // when overlap another ship make red
       document.querySelectorAll('.grid').forEach(
