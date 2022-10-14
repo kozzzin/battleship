@@ -1,6 +1,7 @@
 const { Ship } = require('./src/ship');
 const { Gameboard } = require('./src/board');
 const { Player } = require('./src/player');
+const { Game } = require('./src/gameLoop');
 
 describe('Ship', () => {
   let ship;

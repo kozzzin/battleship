@@ -43,6 +43,12 @@ class Gameboard {
   addShip(x, y, axis, ship) {
     const shipSize = ship.size;
 
+    console.log('SHIP SIZE inside addShip', shipSize);
+
+    if ([x, y, axis, ship].some(el => el === undefined)) {
+      return false;
+    }
+
     if (this.isEnoughSpace(x, y, axis, shipSize)) {
       this.iterateSquares(x, y, shipSize, axis, (row, col) => {
         this.updateSquare(row, col, ship);

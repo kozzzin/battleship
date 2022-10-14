@@ -1,0 +1,117 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-container {
+  margin: auto;
+  min-width: 480px;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-content: center;
+  gap: 20px;
+  background: url('./john-towner-FD_sabE544U-unsplash.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-clip: content-box;
+}
+
+.main-container h1 {
+  width: 100%;
+  display: inline-block;
+  height: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3rem;
+  font-size: 3rem;
+  flex: 0 1 auto;
+  margin: 0;
+}
+
+h2 {
+  display: inline-block;
+}
+
+.gameflow {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.player-container,
+.comp-container {
+  display: block;
+  min-width: 400px;
+  min-height: fit-content;
+  height: auto;
+  grid-row: 2/3;
+  position: relative;
+  /* overflow: hidden; */
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.board-grid {
+  width: 400px;
+  height: 400px;
+  display: grid;
+  grid-template-columns: repeat(10,1fr);
+  grid-template-rows: repeat(10,1fr);
+  background: greenyellow;
+  gap: 1px;
+  position: relative;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.5);
+  border: 5px solid greenyellow;
+}
+
+.grid {
+  background-color: black;
+  box-shadow: inset 0 0 3px greenyellow;
+  cursor: crosshair;
+}
+
+.ship,
+.ship-temp {
+  background-color: greenyellow;
+  border: 1px solid black;
+  z-index: 1;
+}
+
+.ship-container {
+  display: block;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  position: absolute;
+  z-index: 99999;
+  transition: all 0.2s;
+}
+
+.ship-container .grid {
+  width: 39px;
+  height: 39px;
+  box-sizing: border-box;
+  margin: 1px 1px 0 0;
+}
+
+.button-container {
+  margin-top: 10px;
+}
+
+
+.hit::after {
+  content: 'X';
+  color: red;
+}
