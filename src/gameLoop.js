@@ -1,6 +1,6 @@
 const { Ship } = require('./ship');
 const { Gameboard } = require('./board');
-const { Player } = require('./player');
+const { Computer, Player } = require('./player');
 const { GameInterface } = require('./gameInterface');
 const { EventAggregator } = require('./event');
 
@@ -10,9 +10,10 @@ class Game {
       name,
       new Gameboard(10),
     )
-    this.enemy = new Player(
+    this.enemy = new Computer(
       'Comp',
       new Gameboard(10),
+      this.player,
     );
     this.players = [
       this.player,
@@ -65,46 +66,85 @@ class Game {
     .addEventListener('mousedown', handler);
   }
 
-  start() {
 
-    // new game with form
-    // write something in status bar
-    // put chosen name above the board
-    // win modal
-    // replay button
-
+  getPlayerInterface(name) {
     const player = this.nextTurn();
-
+    this.inter.addBoard('player-container',name);
     this.registerGridClick();
-    window.events.register('squareClick',this.updateGrid.bind(this));
-
-    window.events.register('playerShipsPlaced', () => {
-      this.playerShipsPlaced = true;
-    });
-
     this.inter.createGrid.call(this, player,'.player-container .board-grid');
     this.inter.addRotationButton();
     this.inter.followCursor(this.addNextShip(player));
+    window.events.register('squareClick',this.updateGrid.bind(this));
+    window.events.register('playerShipsPlaced', () => {
+      this.playerShipsPlaced = true;
+    });
+  }
 
-    // waiting choice of player
+  start() {
+    // win modal
+    // replay button
+
+    this.inter.postMessage('Prepare your fleet');
+
     const waitPlayerChoice =  setInterval(() => {
       // playerShips = [];
       if (this.playerShipsPlaced) {
         clearInterval(waitPlayerChoice);
         this.inter.hideRotationButton();
         const computer = this.nextTurn();
-        this.inter.addCompBoard();
+        this.inter.addBoard();
         const compShips = this.giveShips();
         computer.placeShips(compShips);
         this.inter.createCompGrid(computer);
-        this.inter.compGridListener(this.player, this.enemy);
+        this.inter.compGridListener(
+          this.player,
+          this.enemy,
+          this.receiveAttack.bind(this));
         this.run();
       }
     }, 1000);
   }
 
+  receiveAttack(x,y, player, enemy) {
+    const attack = enemy.board.receiveAttack(x, y);
+    if (attack) {
+      this.inter.createCompGrid(enemy);
+      this.inter.compGridListener(
+        player,
+        enemy,
+        this.receiveAttack.bind(this)
+      );
+
+      
+      if (attack === 'hit') {
+        if (enemy.board.board[x][y].value.isSunk()) {
+          this.inter.postMessage(
+            `Enemy ${enemy.board.board[x][y].value.name} is sunk`
+          );
+        } else {
+          this.inter.postMessage(`You ${attack}`);
+        }
+      } else {
+        this.inter.postMessage(`You ${attack}`);
+      }
+      
+      if (enemy.board.shipsAreSunk()) {
+        this.inter.showModal('YOU WON');
+        return;
+      }
+      setTimeout(() => {
+        const compTurn = enemy.turn(...enemy.makeDecision());
+        const result = player.board.receiveAttack(...compTurn);
+        this.inter.postMessage(`Enemy ${result}`);
+        this.inter.createGrid(player,'.player-container .board-grid');
+        if (player.board.shipsAreSunk()) this.inter.showModal('COMPUTER WON');
+      }, 1000);
+    }
+  }
+
   run() {
     console.log(this.enemy.board.getPrintReadyBoard());
+    this.inter.postMessage('Your turn');
   }
 
   addNextShip(player, x, y, axis) {
@@ -146,29 +186,6 @@ class Game {
   }
 }
 
-const game = new Game();
-
-
-document.addEventListener('DOMContentLoaded',() => {
-  game.start();
-})
-
-
-
-
-
-
-// give list of ships to first player
-// receive choice of the first player
-// give list of ships to first player
-// when ready, receive choice of AI
-// give turn to first player
-// check results
-// -- if no ships, end game
-// -- show the winner
-// give tuen to second player
-// -- repeat check
-// continue until one of players don't win
 
 
 module.exports = { Game }

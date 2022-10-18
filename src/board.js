@@ -43,8 +43,6 @@ class Gameboard {
   addShip(x, y, axis, ship) {
     const shipSize = ship.size;
 
-    console.log('SHIP SIZE inside addShip', shipSize);
-
     if ([x, y, axis, ship].some(el => el === undefined)) {
       return false;
     }
@@ -93,8 +91,8 @@ class Gameboard {
   }
 
   isInBoardBorders(x,y) {
-    if (x >= this.board.length) return false;
-    if (y >= this.board.length) return false;
+    if (x >= this.board.length || x < 0) return false;
+    if (y >= this.board.length || y < 0) return false;
     return true;
   }
 
@@ -102,16 +100,14 @@ class Gameboard {
     this.board[x][y].update(value);
   }
 
-  // check if is sunk during game loop
-  // check all ships
   receiveAttack(x,y) {
     const square = this.board[x][y];
     square.hit += 1;
     if (square.value !== undefined) {
       square.value.hit();
-      return true;
+      return 'hit';
     }
-    if (square.hit == 1) return true;
+    if (square.hit == 1) return 'missed';
     return false;
   }
 

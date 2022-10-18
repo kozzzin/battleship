@@ -2,16 +2,17 @@ const { EventAggregator } = require('./event');
 
 class GameInterface {
   constructor() {
-    this.is = 'isis';
     const events = new EventAggregator();
     window.events = events;
   }
 
-
-  addCompBoard(target='.main-container') {
+  addBoard(containerName = 'comp-container', playerName = 'Comp', target='.main-container') {
+    if (playerName === undefined || playerName == '') {
+      playerName = 'Player';
+    }
     const board = document.createElement('div');
-    board.classList.add('comp-container');
-    board.innerHTML = `<h2>Computer</h2>
+    board.classList.add(`${containerName}`);
+    board.innerHTML = `<h2>${playerName}</h2>
     <div class="board-grid"></div>`;
     document.querySelector(target).appendChild(board);
   }
@@ -35,33 +36,16 @@ class GameInterface {
     });
   }
 
-  compGridListener(player, enemy) {
+  compGridListener(player, enemy, attackFunc) {
     const compGrid = document
       .querySelectorAll('.comp-container .board-grid .grid');
     compGrid.forEach((square) => {
       square.addEventListener('mousedown', (event) => {
         const x = parseInt(event.target.getAttribute('data-x'));
         const y = parseInt(event.target.getAttribute('data-y'));
-        this.receiveAttack(x,y,player,enemy);
+        attackFunc(x,y,player,enemy);
       });
     })
-  }
-
-  receiveAttack(x,y, player, enemy) {
-    console.log(x,y,player,enemy);
-    const attack = enemy.board.receiveAttack(x, y);
-    if (attack) {
-      this.createCompGrid(enemy);
-      this.compGridListener(player, enemy);
-      if (enemy.board.shipsAreSunk()) {
-        alert('YOU WON');
-        return;
-      }
-      const compTurn = enemy.turn(...enemy.makeDecision());
-      player.board.receiveAttack(...compTurn);
-      this.createGrid(player,'.player-container .board-grid');
-      if (player.board.shipsAreSunk()) alert('COMP WON');
-    }
   }
 
   createGrid(player, target) {
@@ -126,6 +110,13 @@ class GameInterface {
     }
   }
 
+
+  showModal(message) {
+    const modal = document.querySelector('.modal');
+    modal.querySelector('h1').innerText = message;
+    modal.style = "display: flex";
+  }
+
   followCursor(ship) {
     // when intersects with borders make red
     // when overlap another ship make red
@@ -182,6 +173,12 @@ class GameInterface {
       shipContainer.innerHTML += `<div class="grid ship"></div>`;
     }
     document.querySelector('.player-container .board-grid').appendChild(shipContainer);
+  }
+
+
+  postMessage(message) {
+    const statusBar  = document.querySelector('.gameflow');
+    statusBar.innerText = message;
   }
 
 }

@@ -116,7 +116,7 @@ describe('Gameboard', () => {
     const x = 0;
     const y = 0;
     expect(board.receiveAttack(x,y))
-      .toBe(false);
+      .toBe('missed');
     expect(board.board[x][y])
       .toEqual({
         value: undefined,
@@ -130,7 +130,7 @@ describe('Gameboard', () => {
     const y = 0;
     board.addShip(x, y, 'y', new Ship(2));
     expect(board.receiveAttack(x,y))
-      .toBe(true);
+      .toBe('hit');
     expect(board.board[x][y])
       .toEqual({
         value: {
@@ -152,11 +152,11 @@ describe('Gameboard', () => {
 
     // first attack
     expect(board.receiveAttack(0,1))
-      .toBe(true);
+      .toBe('hit');
 
     // second attack
     expect(board.receiveAttack(1,1))
-      .toBe(true);
+      .toBe('hit');
 
     // one ship is sunk
     expect(board.board[0][1].value.isSunk())

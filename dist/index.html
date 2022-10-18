@@ -11,22 +11,18 @@
 <body>
   <div class="main-container">
     <h1>Battleship</h1>
-    <p class="gameflow">Place your ship</p>
-    <div class="player-container">
-      <h2>Player</h2>
-      <div class="board-grid">
-        <!-- <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div>
-        <div class="grid"></div> -->
-      </div>
+    <p class="gameflow">What is your name?</p>
+    <div class="game-intro">
+      <form>
+        <input type="text" name="name" id="name" placeholder="Your name">
+        <input type="submit" value="start">
+      </form>
     </div>
+
+  <div class="modal">
+    <h1>New game?</h1>
+    <button class="more" onclick="window.events.publish('newgame')">New game</button>
+  </div>
     
   </div>
 </body>
